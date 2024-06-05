@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Tracker</title>
+</head>
+<body>
+    <div id="balance">0</div>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script>
+
+    const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
+    const walletPublickey = new solanaWeb3.PublicKey('3M7y6HzG9onDheoGJpJUHxqZeLN7hxGpo2nwoAazbA7G');
+    const tokenPublickey = new solanaWeb3.PublicKey('2wW4GR7rZfgvnxFPrb98fEDYSWkYxNYJ9E9YiTTYZJq7');
+
+    async function updateBalance(){
+        const balance = await connection.getTokenAccountBalance(tokenPublickey);
+        const amount = Number(balance.value.amount);
+        const decimals = balance.value.decimals;
+        const uiAmount = amount / (10 ** decimals);
+        document.getElementById('balance').innerText = uiAmount.toFixed(decimals);
+    }
+
+    setInterval(updateBalance, 5000);
+</script>
+</body>
+</html>
